@@ -1,0 +1,165 @@
+student@student-OptiPlex-3050:~$ sudo mysql -u root -p
+[sudo] password for student: 
+Enter password: 
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 33
+Server version: 10.0.38-MariaDB-0ubuntu0.16.04.1 Ubuntu 16.04
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> create database db;
+Query OK, 1 row affected (0.00 sec)
+
+MariaDB [(none)]> use db;
+Database changed
+MariaDB [db]> create table emp(eid int,ename varchar(20));
+Query OK, 0 rows affected (0.22 sec)
+MariaDB [db]> create table  student(rollno int,name varchar(20),address varchar(30),total int);
+Query OK, 0 rows affected (0.20 sec)
+
+MariaDB [db]> insert into student values(1,'fathima','kundalil',76);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [db]> insert into student values(2,'preema','maliyekkal',65);
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [db]> insert into student values(3,'sahla','palakkall',72);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [db]> insert into student values(4,'reshma','kalathil',96);
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [db]> insert into student values(5,'anna','pukkattil',85);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [db]> select * from student;
++--------+---------+------------+-------+
+| rollno | name    | address    | total |
++--------+---------+------------+-------+
+|      1 | fathima | kundalil   |    76 |
+|      2 | preema  | maliyekkal |    65 |
+|      3 | sahla   | palakkall  |    72 |
+|      4 | reshma  | kalathil   |    96 |
+|      5 | anna    | pukkattil  |    85 |
++--------+---------+------------+-------+
+5 rows in set (0.00 sec)
+
+MariaDB [db]> select rollno,address from student;
++--------+------------+
+| rollno | address    |
++--------+------------+
+|      1 | kundalil   |
+|      2 | maliyekkal |
+|      3 | palakkall  |
+|      4 | kalathil   |
+|      5 | pukkattil  |
++--------+------------+
+5 rows in set (0.00 sec)
+
+MariaDB [db]> select * from student where total>80;
++--------+--------+-----------+-------+
+| rollno | name   | address   | total |
++--------+--------+-----------+-------+
+|      4 | reshma | kalathil  |    96 |
+|      5 | anna   | pukkattil |    85 |
++--------+--------+-----------+-------+
+2 rows in set (0.00 sec)
+
+MariaDB [db]> alter table student add grade varchar(2);
+Query OK, 0 rows affected (0.37 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [db]> update student set grade='C' where rollno=1;
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [db]> update student set grade='C' where rollno=2;
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [db]> update student set grade='C' where rollno=3;
+Query OK, 1 row affected (0.03 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [db]> update student set grade='A' where rollno=4;
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [db]> update student set grade='B' where rollno=5;
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [db]> select * from student;
++--------+---------+------------+-------+-------+
+| rollno | name    | address    | total | grade |
++--------+---------+------------+-------+-------+
+|      1 | fathima | kundalil   |    76 | C     |
+|      2 | preema  | maliyekkal |    65 | C     |
+|      3 | sahla   | palakkall  |    72 | C     |
+|      4 | reshma  | kalathil   |    96 | A     |
+|      5 | anna    | pukkattil  |    85 | B     |
++--------+---------+------------+-------+-------+
+5 rows in set (0.00 sec)
+
+MariaDB [db]> alter table student drop address;
+Query OK, 0 rows affected (0.48 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [db]> select * from student;
++--------+---------+-------+-------+
+| rollno | name    | total | grade |
++--------+---------+-------+-------+
+|      1 | fathima |    76 | C     |
+|      2 | preema  |    65 | C     |
+|      3 | sahla   |    72 | C     |
+|      4 | reshma  |    96 | A     |
+|      5 | anna    |    85 | B     |
++--------+---------+-------+-------+
+5 rows in set (0.00 sec)
+
+MariaDB [db]> update student set total='92' where rollno=4; 
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [db]> select * from student;
++--------+---------+-------+-------+
+| rollno | name    | total | grade |
++--------+---------+-------+-------+
+|      1 | fathima |    76 | C     |
+|      2 | preema  |    65 | C     |
+|      3 | sahla   |    72 | C     |
+|      4 | reshma  |    92 | A     |
+|      5 | anna    |    85 | B     |
++--------+---------+-------+-------+
+5 rows in set (0.00 sec)
+
+MariaDB [db]> alter table student modify name varchar(15);
+Query OK, 5 rows affected (0.69 sec)               
+Records: 5  Duplicates: 0  Warnings: 0
+
+MariaDB [db]> select * from student;
++--------+---------+-------+-------+
+| rollno | name    | total | grade |
++--------+---------+-------+-------+
+|      1 | fathima |    76 | C     |
+|      2 | preema  |    65 | C     |
+|      3 | sahla   |    72 | C     |
+|      4 | reshma  |    92 | A     |
+|      5 | anna    |    85 | B     |
++--------+---------+-------+-------+
+5 rows in set (0.00 sec)
+
+MariaDB [db]> desc student;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| rollno | int(11)     | YES  |     | NULL    |       |
+| name   | varchar(15) | YES  |     | NULL    |       |
+| total  | int(11)     | YES  |     | NULL    |       |
+| grade  | varchar(2)  | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+

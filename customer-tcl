@@ -1,0 +1,133 @@
+MariaDB [db1]> create table customer(cid int,cname varchar(20),salary int);
+Query OK, 0 rows affected (0.22 sec)
+
+MariaDB [db1]> select * from customer;
+Empty set (0.00 sec)
+
+MariaDB [db1]> start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [db1]> set autocommit=0;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [db1]> insert into customer values(12,'Arpa',60000);
+Query OK, 1 row affected (0.00 sec)
+
+MariaDB [db1]> insert into customer values(11,'Athul',60000);
+Query OK, 1 row affected (0.00 sec)
+
+MariaDB [db1]> commit;
+Query OK, 0 rows affected (0.03 sec)
+
+MariaDB [db1]> select * from customer;
++------+-------+--------+
+| cid  | cname | salary |
++------+-------+--------+
+|   12 | Arpa  |  60000 |
+|   11 | Athul |  60000 |
++------+-------+--------+
+2 rows in set (0.00 sec)
+
+MariaDB [db1]> delete from customer where cid=13;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [db1]> select * from customer;
++------+-------+--------+
+| cid  | cname | salary |
++------+-------+--------+
+|   12 | Arpa  |  60000 |
+|   11 | Athul |  60000 |
++------+-------+--------+
+2 rows in set (0.00 sec)
+
+MariaDB [db1]> delete from customer where cid=11;
+Query OK, 1 row affected (0.00 sec)
+
+MariaDB [db1]> select * from customer;
++------+-------+--------+
+| cid  | cname | salary |
++------+-------+--------+
+|   12 | Arpa  |  60000 |
++------+-------+--------+
+1 row in set (0.00 sec)
+
+MariaDB [db1]> rollback;
+Query OK, 0 rows affected (0.03 sec)
+
+MariaDB [db1]> select * from customer;
++------+-------+--------+
+| cid  | cname | salary |
++------+-------+--------+
+|   12 | Arpa  |  60000 |
+|   11 | Athul |  60000 |
++------+-------+--------+
+2 rows in set (0.00 sec)
+
+MariaDB [db1]> delete from customer where cid=11;
+Query OK, 1 row affected (0.00 sec)
+
+MariaDB [db1]> commit;
+Query OK, 0 rows affected (0.03 sec)
+
+MariaDB [db1]> select * from customer;
++------+-------+--------+
+| cid  | cname | salary |
++------+-------+--------+
+|   12 | Arpa  |  60000 |
++------+-------+--------+
+1 row in set (0.00 sec)
+
+MariaDB [db1]> rollback;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [db1]> select * from customer;
++------+-------+--------+
+| cid  | cname | salary |
++------+-------+--------+
+|   12 | Arpa  |  60000 |
++------+-------+--------+
+1 row in set (0.00 sec)
+
+MariaDB [db1]> insert into customer values(11,'Athul',60000);
+Query OK, 1 row affected (0.00 sec)
+
+MariaDB [db1]> savepoint s1;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [db1]> insert into customer values(14,'thasni',60000);
+Query OK, 1 row affected (0.00 sec)
+
+MariaDB [db1]> select * from customer;
++------+--------+--------+
+| cid  | cname  | salary |
++------+--------+--------+
+|   12 | Arpa   |  60000 |
+|   11 | Athul  |  60000 |
+|   14 | thasni |  60000 |
++------+--------+--------+
+3 rows in set (0.00 sec)
+
+MariaDB [db1]> rollback to s1;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [db1]> select * from customer;
++------+-------+--------+
+| cid  | cname | salary |
++------+-------+--------+
+|   12 | Arpa  |  60000 |
+|   11 | Athul |  60000 |
++------+-------+--------+
+2 rows in set (0.00 sec)
+
+MariaDB [db1]> insert into customer values(14,'thasni',60000);
+Query OK, 1 row affected (0.00 sec)
+
+MariaDB [db1]> commit;
+Query OK, 0 rows affected (0.03 sec)
+
+MariaDB [db1]> rollback to s1;
+ERROR 1305 (42000): SAVEPOINT s1 does not exist
+MariaDB [db1]> savepoint s2;
+Query OK, 0 rows affected (0.00 sec)
+
+

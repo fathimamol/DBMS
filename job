@@ -1,0 +1,299 @@
+student@student-OptiPlex-3050:~$ sudo mysql -u root -p
+[sudo] password for student: 
+Enter password: 
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 33
+Server version: 10.0.38-MariaDB-0ubuntu0.16.04.1 Ubuntu 16.04
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| db1                |
+| information_schema |
+| mysql              |
+| performance_schema |
++--------------------+
+4 rows in set (0.02 sec)
+
+MariaDB [(none)]> use db1;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+MariaDB [db1]> create table jobs(jobid int,job_tittle varchar(50),min_salary int, max_salary int(20));
+Query OK, 0 rows affected (0.19 sec)
+
+MariaDB [db1]> drop table jobs;
+Query OK, 0 rows affected (0.10 sec)
+
+MariaDB [db1]> use db1;
+Database changed
+MariaDB [db1]> create table jobs(jobid int primary key,job_tittle varchar(50),min_salary int, max_salary int(20));
+Query OK, 0 rows affected (0.21 sec)
+
+MariaDB [db1]> insert into jobs values(1,'Manager',5000,10000);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [db1]> insert into jobs values(2,'Chief Associate',15000,20000);
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [db1]> insert into jobs values(3,'Developer',25000,40000);
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [db1]> insert into jobs values(4,'ProductOwner',50000,60000);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [db1]> insert into jobs values(5,'Scrum Master',70000,90000);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [db1]> select * from jobs;
++-------+-----------------+------------+------------+
+| jobid | job_tittle      | min_salary | max_salary |
++-------+-----------------+------------+------------+
+|     1 | Manager         |       5000 |      10000 |
+|     2 | Chief Associate |      15000 |      20000 |
+|     3 | Developer       |      25000 |      40000 |
+|     4 | ProductOwner    |      50000 |      60000 |
+|     5 | Scrum Master    |      70000 |      90000 |
++-------+-----------------+------------+------------+
+5 rows in set (0.00 sec)
+
+MariaDB [db1]> create table departments(department_id int primary key,department_name varchar(50));
+Query OK, 0 rows affected (0.24 sec)
+
+MariaDB [db1]> insert into departments values(1,'Technical');
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [db1]> insert into departments values(2,'Leadership');
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [db1]> insert into departments values(3,'Project Head');
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [db1]> insert into departments values(4,'Client');
+Query OK, 1 row affected (0.03 sec)
+MariaDB [db1]> select * from departments;
++---------------+-----------------+
+| department_id | department_name |
++---------------+-----------------+
+|             1 | Technical       |
+|             2 | Leadership      |
+|             3 | Project Head    |
+|             4 | Client          |
++---------------+-----------------+
+4 rows in set (0.00 sec)
+
+MariaDB [db1]> create table employees(employee_id int primary key,first_name varchar(10),last_name varchar(10),email varchar(20),phone_number long,hire_date date,jobid int references jobs,salary int,manager_id int,department_id int references departments);
+Query OK, 0 rows affected (0.23 sec)
+
+MariaDB [db1]> insert into employees values(101,'Ayushi','Taltal','ayushi@gmail.com',812345678,'2021-12-03',1,8000,1,1);
+Query OK, 1 row affected, 1 warning (0.51 sec)
+
+MariaDB [db1]> insert into employees values(102,'Ayushidra','Mahal','ayushidra@gmail.com',8129344239,'2012-12-03',4,8000,1,5);
+Query OK, 1 row affected, 1 warning (0.03 sec)
+
+
+
+MariaDB [db1]> insert into employees values(103,'Rashmi','Mehta','rashmi@gmail.com',7550047809,'2011-12-03',4,55000,1,2);
+Query OK, 1 row affected (0.03 sec)
+
+
+Database changed
+MariaDB [db1]> select * from jobs;
++-------+-----------------+------------+------------+
+| jobid | job_tittle      | min_salary | max_salary |
++-------+-----------------+------------+------------+
+|     1 | Manager         |       5000 |      10000 |
+|     2 | Chief Associate |      15000 |      20000 |
+|     3 | Developer       |      25000 |      40000 |
+|     4 | ProductOwner    |      50000 |      60000 |
+|     5 | Scrum Master    |      70000 |      90000 |
++-------+-----------------+------------+------------+
+5 rows in set (0.00 sec)
+
+MariaDB [db1]> select * from departments;
++---------------+-----------------+
+| department_id | department_name |
++---------------+-----------------+
+|             1 | Technical       |
+|             2 | Leadership      |
+|             3 | Project Head    |
+|             4 | Client          |
++---------------+-----------------+
+4 rows in set (0.00 sec)
+
+MariaDB [db1]> select * from employee;
+Empty set (0.01 sec)
+
+
+MariaDB [db1]> insert into employees values(104,'Manu','Raghav','manu@gmail.com',1526974153,'2000-05-10',1,30000,3,1);
+Query OK, 1 row affected (0.06 sec)
+
+
+MariaDB [db1]> insert into employees values(105,'Nihil','Ashok','nihil@gmail.com',1526974223,'2003-05-10',5,90000,4,4);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [db1]> select * from employees;
++-------------+------------+-----------+---------------------+--------------+------------+-------+--------+------------+---------------+
+| employee_id | first_name | last_name | email               | phone_number | hire_date  | jobid | salary | manager_id | department_id |
++-------------+------------+-----------+---------------------+--------------+------------+-------+--------+------------+---------------+
+|         101 | Ayushi     | Taltal    | ayushi@gmail.com    | 812345678    | 2020-11-03 |     1 |   8000 |          1 |             1 |
+|         102 | Ayushidra  | Mahal     | ayushidra@gmail.com | 8129344239   | 2012-12-03 |     4 |   8000 |          1 |             5 |
+|         103 | Rashmi     | Mehta     | rashmi@gmail.com    | 7550047809   | 2011-12-03 |     4 |  55000 |          1 |             2 |
+|         104 | Manu       | Raghav    | manu@gmail.com      | 1526974153   | 2000-05-10 |     1 |  30000 |          3 |             1 |
+|         105 | Nihil      | Ashok     | nihil@gmail.com     | 1526974223   | 2003-05-10 |     5 |  90000 |          4 |             4 |
++-------------+------------+-----------+---------------------+--------------+------------+-------+--------+------------+---------------+
+5 rows in set (0.01 sec)
+
+MariaDB [db1]> alter table departments rename to  Dept;
+Query OK, 0 rows affected (0.10 sec)
+
+MariaDB [db1]> select * from Dept;
++---------------+-----------------+
+| department_id | department_name |
++---------------+-----------------+
+|             1 | Technical       |
+|             2 | Leadership      |
+|             3 | Project Head    |
+|             4 | Client          |
++---------------+-----------------+
+4 rows in set (0.00 sec)
+
+MariaDB [db1]> alter table employees modify salary smallint;
+Query OK, 5 rows affected, 2 warnings (0.64 sec)   
+Records: 5  Duplicates: 0  Warnings: 2
+
+MariaDB [db1]> desc employees;
++---------------+-------------+------+-----+---------+-------+
+| Field         | Type        | Null | Key | Default | Extra |
++---------------+-------------+------+-----+---------+-------+
+| employee_id   | int(11)     | NO   | PRI | NULL    |       |
+| first_name    | varchar(10) | YES  |     | NULL    |       |
+| last_name     | varchar(10) | YES  |     | NULL    |       |
+| email         | varchar(20) | YES  |     | NULL    |       |
+| phone_number  | mediumtext  | YES  |     | NULL    |       |
+| hire_date     | date        | YES  |     | NULL    |       |
+| jobid         | int(11)     | YES  |     | NULL    |       |
+| salary        | smallint(6) | YES  |     | NULL    |       |
+| manager_id    | int(11)     | YES  |     | NULL    |       |
+| department_id | int(11)     | YES  |     | NULL    |       |
++---------------+-------------+------+-----+---------+-------+
+10 rows in set (0.01 sec)
+
+MariaDB [db1]> alter table employees add commission int; 
+Query OK, 0 rows affected (0.33 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [db1]> desc employees;
++---------------+-------------+------+-----+---------+-------+
+| Field         | Type        | Null | Key | Default | Extra |
++---------------+-------------+------+-----+---------+-------+
+| employee_id   | int(11)     | NO   | PRI | NULL    |       |
+| first_name    | varchar(10) | YES  |     | NULL    |       |
+| last_name     | varchar(10) | YES  |     | NULL    |       |
+| email         | varchar(20) | YES  |     | NULL    |       |
+| phone_number  | mediumtext  | YES  |     | NULL    |       |
+| hire_date     | date        | YES  |     | NULL    |       |
+| jobid         | int(11)     | YES  |     | NULL    |       |
+| salary        | smallint(6) | YES  |     | NULL    |       |
+| manager_id    | int(11)     | YES  |     | NULL    |       |
+| department_id | int(11)     | YES  |     | NULL    |       |
+| commission    | int(11)     | YES  |     | NULL    |       |
++---------------+-------------+------+-----+---------+-------+
+11 rows in set (0.00 sec)
+
+MariaDB [db1]> update employees set commission=1500 where employee_id=101;
+Query OK, 1 row affected (0.03 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [db1]> update employees set commission=2000 where employee_id=102;
+Query OK, 1 row affected (0.03 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [db1]> update employees set commission=2500 where employee_id=103;
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [db1]> update employees set commission=3000 where employee_id=104;
+Query OK, 1 row affected (0.03 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [db1]> update employees set commission=3500 where employee_id=105;
+Query OK, 1 row affected (0.03 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [db1]> select * from employees;
++-------------+------------+-----------+---------------------+--------------+------------+-------+--------create table employees(employee_id int primary key,first_name varchar(10),last_name varchar(10),email varchar(20),phone_number long,hire_date date,jobid int references jobs,salary int,manager_id int,department_id int references departments);
+Query OK, 0 rows affected (0.23 sec)
++------------+---------------+------------+
+| employee_id | first_name | last_name | email               | phone_number | hire_date  | jobid | salary | manager_id | department_id | commission |
++-------------+------------+-----------+---------------------+--------------+------------+-------+--------+------------+---------------+------------+
+|         101 | Ayushi     | Taltal    | ayushi@gmail.com    | 812345678    | 2020-11-03 |     1 |   8000 |          1 |             1 |       1500 |
+|         102 | Ayushidra  | Mahal     | ayushidra@gmail.com | 8129344239   | 2012-12-03 |     4 |   8000 |          1 |             5 |       2000 |
+|         103 | Rashmi     | Mehta     | rashmi@gmail.com    | 7550047809   | 2011-12-03 |     4 |  32767 |          1 |             2 |       2500 |
+|         104 | Manu       | Raghav    | manu@gmail.com      | 1526974153   | 2000-05-10 |     1 |  30000 |          3 |             1 |       3000 |
+|         105 | Nihil      | Ashok     | nihil@gmail.com     | 1526974223   | 2003-05-10 |     5 |  32767 |          4 |             4 |       3500 |
++-------------+------------+-----------+---------------------+--------------+------------+-------+--------+------------+---------------+------------+
+5 rows in set (0.00 sec)
+
+MariaDB [db1]> alter table employees drop hire_date;
+Query OK, 0 rows affected (0.32 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [db1]> select * from employees;
++-------------+------------+-----------+---------------------+--------------+-------+--------+------------+---------------+------------+
+| employee_id | first_name | last_name | email               | phone_number | jobid | salary | manager_id | department_id | commission |
++-------------+------------+-----------+---------------------+--------------+-------+--------+------------+---------------+------------+
+|         101 | Ayushi     | Taltal    | ayushi@gmail.com    | 812345678    |     1 |   8000 |          1 |             1 |       1500 |
+|         102 | Ayushidra  | Mahal     | ayushidra@gmail.com | 8129344239   |     4 |   8000 |          1 |             5 |       2000 |
+|         103 | Rashmi     | Mehta     | rashmi@gmail.com    | 7550047809   |     4 |  32767 |          1 |             2 |       2500 |
+|         104 | Manu       | Raghav    | manu@gmail.com      | 1526974153   |     1 |  30000 |          3 |             1 |       3000 |
+|         105 | Nihil      | Ashok     | nihil@gmail.com     | 1526974223   |     5 |  32767 |          4 |             4 |       3500 |
++-------------+------------+-----------+---------------------+--------------+-------+--------+------------+---------------+------------+
+5 rows in set (0.00 sec)
+
+MariaDB [db1]> select * from employee where salary>30000; 
+Empty set (0.00 sec)
+
+MariaDB [db1]> select * from employees where salary>30000; 
++-------------+------------+-----------+------------------+--------------+-------+--------+------------+---------------+------------+
+| employee_id | first_name | last_name | email            | phone_number | jobid | salary | manager_id | department_id | commission |
++-------------+------------+-----------+------------------+--------------+-------+--------+------------+---------------+------------+
+|         103 | Rashmi     | Mehta     | rashmi@gmail.com | 7550047809   |     4 |  32767 |          1 |             2 |       2500 |
+|         105 | Nihil      | Ashok     | nihil@gmail.com  | 1526974223   |     5 |  32767 |          4 |             4 |       3500 |
++-------------+------------+-----------+------------------+--------------+-------+--------+------------+---------------+------------+
+2 rows in set (0.00 sec)
+
+MariaDB [db1]> delete from employees where employee_id=104;
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [db1]> select * from employees;
++-------------+------------+-----------+---------------------+--------------+-------+--------+------------+---------------+------------+
+| employee_id | first_name | last_name | email               | phone_number | jobid | salary | manager_id | department_id | commission |
++-------------+------------+-----------+---------------------+--------------+-------+--------+------------+---------------+------------+
+|         101 | Ayushi     | Taltal    | ayushi@gmail.com    | 812345678    |     1 |   8000 |          1 |             1 |       1500 |
+|         102 | Ayushidra  | Mahal     | ayushidra@gmail.com | 8129344239   |     4 |   8000 |          1 |             5 |       2000 |
+|         103 | Rashmi     | Mehta     | rashmi@gmail.com    | 7550047809   |     4 |  32767 |          1 |             2 |       2500 |
+|         105 | Nihil      | Ashok     | nihil@gmail.com     | 1526974223   |     5 |  32767 |          4 |             4 |       3500 |
++-------------+------------+-----------+---------------------+--------------+-------+--------+------------+---------------+------------+
+4 rows in set (0.00 sec)
+
+MariaDB [db1]> select * from employees left join jobs on jobs.jobid=employees.jobid left join Dept on Dept.department_id=employees.department_id;
++-------------+------------+-----------+---------------------+--------------+-------+--------+------------+---------------+------------+-------+--------------+------------+------------+---------------+-----------------+
+| employee_id | first_name | last_name | email               | phone_number | jobid | salary | manager_id | department_id | commission | jobid | job_tittle   | min_salary | max_salary | department_id | department_name |
++-------------+------------+-----------+---------------------+--------------+-------+--------+------------+---------------+------------+-------+--------------+------------+------------+---------------+-----------------+
+|         101 | Ayushi     | Taltal    | ayushi@gmail.com    | 812345678    |     1 |   8000 |          1 |             1 |       1500 |     1 | Manager      |       5000 |      10000 |             1 | Technical       |
+|         102 | Ayushidra  | Mahal     | ayushidra@gmail.com | 8129344239   |     4 |   8000 |          1 |             5 |       2000 |     4 | ProductOwner |      50000 |      60000 |          NULL | NULL            |
+|         103 | Rashmi     | Mehta     | rashmi@gmail.com    | 7550047809   |     4 |  32767 |          1 |             2 |       2500 |     4 | ProductOwner |      50000 |      60000 |             2 | Leadership      |
+|         105 | Nihil      | Ashok     | nihil@gmail.com     | 1526974223   |     5 |  32767 |          4 |             4 |       3500 |     5 | Scrum Master |      70000 |      90000 |             4 | Client          |
++-------------+------------+-----------+---------------------+--------------+-------+--------+------------+---------------+------------+-------+--------------+------------+------------+---------------+-----------------+
+4 rows in set (0.00 sec)
+
+MariaDB [db1]> 
+
+

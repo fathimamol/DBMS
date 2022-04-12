@@ -1,0 +1,204 @@
+student@student-OptiPlex-3050:~$ sudo mysql
+[sudo] password for student: 
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 33
+Server version: 10.0.38-MariaDB-0ubuntu0.16.04.1 Ubuntu 16.04
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| db                 |
+| fathima            |
+| information_schema |
+| mysql              |
+| performance_schema |
++--------------------+
+5 rows in set (0.03 sec)
+
+MariaDB [(none)]> use db;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+MariaDB [db]> create table author(author_id int primary key,author_name varchar(20),city varchar(20),country varchar(20));
+Query OK, 0 rows affected (0.23 sec)
+
+MariaDB [db]> insert into author values(1001,'anu','kolkata','india');
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [db]> insert into author values(1002,'arun','newyork','america');
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [db]> insert into author values(1003,'anil','madrid','europe');
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [db]> create table publisher(publisher_id int primary key,publisher_name varchar(20),city varchar(20),country varchar(20));
+Query OK, 0 rows affected (0.23 sec)
+
+MariaDB [db]> create table category(category_id int primary key,description varchar(20));
+Query OK, 0 rows affected (0.24 sec)
+
+MariaDB [db]> create table books(book_id int primary key,title varchar(20),author_id int references author,publisher_id int references publisher,category_id int references category,year int,price int);
+Query OK, 0 rows affected (0.21 sec)
+MariaDB [db]> insert into publisher values(101,'kohinoor publications','kochi','ernakulam');
+Query OK, 1 row affected, 1 warning (0.03 sec)
+
+MariaDB [db]> insert into publisher values(102,'mithra publications','manchester','england');
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [db]> insert into publisher values(103,'jonathan ball publications','lagos','nigeria');
+Query OK, 1 row affected, 1 warning (0.03 sec)
+MariaDB [db]> insert into books values(2001,'Wings of Fire',1001,101,200,1996,605);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [db]> insert into books values(2002,'Drakula',1002,102,201,1997,700);Query OK, 1 row affected (0.04 sec)
+
+MariaDB [db]> insert into books values(2003,'Sherlok Holmes',1003,103,202,1998,450);
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [db]> select * from books;
++---------+----------------+-----------+--------------+-------------+------+-------+
+| book_id | title          | author_id | publisher_id | category_id | year | price |
++---------+----------------+-----------+--------------+-------------+------+-------+
+|    2001 | Wings of Fire  |      1001 |          101 |         200 | 1996 |   605 |
+|    2002 | Drakula        |      1002 |          102 |         201 | 1997 |   700 |
+|    2003 | Sherlok Holmes |      1003 |          103 |         202 | 1998 |   450 |
++---------+----------------+-----------+--------------+-------------+------+-------+
+3 rows in set (0.00 sec)
+
+MariaDB [db]> select book_id,title,price from books;
++---------+----------------+-------+
+| book_id | title          | price |
++---------+----------------+-------+
+|    2001 | Wings of Fire  |   605 |
+|    2002 | Drakula        |   700 |
+|    2003 | Sherlok Holmes |   450 |
++---------+----------------+-------+
+3 rows in set (0.00 sec)
+
+MariaDB [db]> select title from books where price>500;
++---------------+
+| title         |
++---------------+
+| Wings of Fire |
+| Drakula       |
++---------------+
+2 rows in set (0.00 sec)
+
+MariaDB [db]> select title from books where category_id in(select category_id from category where description!='fiction books');
++---------------+
+| title         |
++---------------+
+| Wings of Fire |
+| Drakula       |
++---------------+
+2 rows in set (0.00 sec)
+
+MariaDB [db]> insert into books values(2004,'Bridge to Bones',1004,104,203,1999,490);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [db]> insert into books values(2005,'Band od Brothers',1005,105,204,2000,400);
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [db]> select * from books;
++---------+------------------+-----------+--------------+-------------+------+-------+
+| book_id | title            | author_id | publisher_id | category_id | year | price |
++---------+------------------+-----------+--------------+-------------+------+-------+
+|    2001 | Wings of Fire    |      1001 |          101 |         200 | 1996 |   605 |
+|    2002 | Drakula          |      1002 |          102 |         201 | 1997 |   700 |
+|    2003 | Sherlok Holmes   |      1003 |          103 |         202 | 1998 |   450 |
+|    2004 | Bridge to Bones  |      1004 |          104 |         203 | 1999 |   490 |
+|    2005 | Band od Brothers |      1005 |          105 |         204 | 2000 |   400 |
++---------+------------------+-----------+--------------+-------------+------+-------+
+5 rows in set (0.00 sec)
+
+MariaDB [db]> 
+Display all 832 possibilities? (y or n)
+MariaDB [db]> select * from books where title like 'B%';
++---------+------------------+-----------+--------------+-------------+------+-------+
+| book_id | title            | author_id | publisher_id | category_id | year | price |
++---------+------------------+-----------+--------------+-------------+------+-------+
+|    2004 | Bridge to Bones  |      1004 |          104 |         203 | 1999 |   490 |
+|    2005 | Band od Brothers |      1005 |          105 |         204 | 2000 |   400 |
++---------+------------------+-----------+--------------+-------------+------+-------+
+2 rows in set (0.00 sec)
+MariaDB [db]> insert into books values(2001,'Wings of Fire',1001,101,200,1996,605);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [db]> insert into books values(2002,'Drakula',1002,102,201,1997,700);Query OK, 1 row affected (0.04 sec)
+
+MariaDB [db]> insert into books values(2003,'Sherlok Holmes',1003,103,202,1998,450);
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [db]> select * from books;
++---------+----------------+-----------+--------------+-------------+------+-------+
+| book_id | title          | author_id | publisher_id | category_id | year | price |
++---------+----------------+-----------+--------------+-------------+------+-------+
+|    2001 | Wings of Fire  |      1001 |          101 |         200 | 1996 |   605 |
+|    2002 | Drakula        |      1002 |          102 |         201 | 1997 |   700 |
+|    2003 | Sherlok Holmes |      1003 |          103 |         202 | 1998 |   450 |
++---------+----------------+-----------+--------------+-------------+------+-------+
+3 rows in set (0.00 sec)
+
+MariaDB [db]> select book_id,title,price from books;
++---------+----------------+-------+
+| book_id | title          | price |
++---------+----------------+-------+
+|    2001 | Wings of Fire  |   605 |
+|    2002 | Drakula        |   700 |
+|    2003 | Sherlok Holmes |   450 |
++---------+----------------+-------+
+3 rows in set (0.00 sec)
+
+MariaDB [db]> select title from books where price>500;
++---------------+
+| title         |
++---------------+
+| Wings of Fire |
+| Drakula       |
++---------------+
+2 rows in set (0.00 sec)
+
+MariaDB [db]> select title from books where category_id in(select category_id from category where description!='fiction books');
++---------------+
+| title         |
++---------------+
+| Wings of Fire |
+| Drakula       |
++---------------+
+2 rows in set (0.00 sec)
+
+MariaDB [db]> insert into books values(2004,'Bridge to Bones',1004,104,203,1999,490);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [db]> insert into books values(2005,'Band od Brothers',1005,105,204,2000,400);
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [db]> select * from books;
++---------+------------------+-----------+--------------+-------------+------+-------+
+| book_id | title            | author_id | publisher_id | category_id | year | price |
++---------+------------------+-----------+--------------+-------------+------+-------+
+|    2001 | Wings of Fire    |      1001 |          101 |         200 | 1996 |   605 |
+|    2002 | Drakula          |      1002 |          102 |         201 | 1997 |   700 |
+|    2003 | Sherlok Holmes   |      1003 |          103 |         202 | 1998 |   450 |
+|    2004 | Bridge to Bones  |      1004 |          104 |         203 | 1999 |   490 |
+|    2005 | Band od Brothers |      1005 |          105 |         204 | 2000 |   400 |
++---------+------------------+-----------+--------------+-------------+------+-------+
+5 rows in set (0.00 sec)
+
+MariaDB [db]> 
+Display all 832 possibilities? (y or n)
+MariaDB [db]> select * from books where title like 'B%';
++---------+------------------+-----------+--------------+-------------+------+-------+
+| book_id | title            | author_id | publisher_id | category_id | year | price |
++---------+------------------+-----------+--------------+-------------+------+-------+
+|    2004 | Bridge to Bones  |      1004 |          104 |         203 | 1999 |   490 |
+|    2005 | Band od Brothers |      1005 |          105 |         204 | 2000 |   400 |
++---------+------------------+-----------+--------------+-------------+------+-------+
+2 rows in set (0.00 sec)
+
