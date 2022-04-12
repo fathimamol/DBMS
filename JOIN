@@ -1,0 +1,124 @@
+student@student-OptiPlex-3050:~/Desktop/Fathima Mol DBMS$ sudo mysql
+[sudo] password for student: 
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 33
+Server version: 10.0.38-MariaDB-0ubuntu0.16.04.1 Ubuntu 16.04
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| db                 |
+| fathima            |
+| information_schema |
+| mysql              |
+| performance_schema |
++--------------------+
+5 rows in set (0.02 sec)
+
+MariaDB [(none)]> use db;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+MariaDB [db]> create table Employee(EMP_ID int primary key,EMP_NAME varchar(20),CITY varchar(20),SALARY int,AGE int);
+Query OK, 0 rows affected (0.22 sec)
+
+MariaDB [db]> create table Project(PROJECT_NO int primary key,EMP_NO int references Employee,DEPARTMENT varchar(20));
+Query OK, 0 rows affected (0.21 sec)
+
+MariaDB [db]> insert into Employee values(1,'Angelina','Chicago',200000,30);
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [db]> insert into Employee values(2,'Robert','Austin',300000,26);
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [db]> insert into Employee values(3,'Christian','Denver',100000,42);
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [db]> insert into Employee values(4,'Kristen','Washington',500000,29);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [db]> insert into Employee values(5,'Russell','Los angels',200000,36);
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [db]> insert into Employee values(6,'Marry','Canada',600000,48);
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [db]> insert into Project values(101,1,'Testing');
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [db]> insert into Project values(102,2,'Development');
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [db]> insert into Project values(103,3,'Designing');
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [db]> insert into Project values(104,4,'Development');
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [db]> select * from Employee;
++--------+-----------+------------+--------+------+
+| EMP_ID | EMP_NAME  | CITY       | SALARY | AGE  |
++--------+-----------+------------+--------+------+
+|      1 | Angelina  | Chicago    | 200000 |   30 |
+|      2 | Robert    | Austin     | 300000 |   26 |
+|      3 | Christian | Denver     | 100000 |   42 |
+|      4 | Kristen   | Washington | 500000 |   29 |
+|      5 | Russell   | Los angels | 200000 |   36 |
+|      6 | Marry     | Canada     | 600000 |   48 |
++--------+-----------+------------+--------+------+
+6 rows in set (0.00 sec)
+
+MariaDB [db]> select * from Project;
++------------+--------+-------------+
+| PROJECT_NO | EMP_NO | DEPARTMENT  |
++------------+--------+-------------+
+|        101 |      1 | Testing     |
+|        102 |      2 | Development |
+|        103 |      3 | Designing   |
+|        104 |      4 | Development |
++------------+--------+-------------+
+4 rows in set (0.00 sec)
+
+MariaDB [db]> select Employee.EMP_NAME,Project.DEPARTMENT from Employee INNER JOIN Project ON Employee.EMP_ID=Project.EMP_NO;
++-----------+-------------+
+| EMP_NAME  | DEPARTMENT  |
++-----------+-------------+
+| Angelina  | Testing     |
+| Robert    | Development |
+| Christian | Designing   |
+| Kristen   | Development |
++-----------+-------------+
+4 rows in set (0.00 sec)
+
+MariaDB [db]> select Employee.EMP_NAME,Project.DEPARTMENT from Employee LEFT JOIN Project ON Employee.EMP_ID=Project.EMP_NO;
++-----------+-------------+
+| EMP_NAME  | DEPARTMENT  |
++-----------+-------------+
+| Angelina  | Testing     |
+| Robert    | Development |
+| Christian | Designing   |
+| Kristen   | Development |
+| Russell   | NULL        |
+| Marry     | NULL        |
++-----------+-------------+
+6 rows in set (0.00 sec)
+
+MariaDB [db]> select Employee.EMP_NAME,Project.DEPARTMENT from Employee RIGHT JOIN Project ON Employee.EMP_ID=Project.EMP_NO;
++-----------+-------------+
+| EMP_NAME  | DEPARTMENT  |
++-----------+-------------+
+| Angelina  | Testing     |
+| Robert    | Development |
+| Christian | Designing   |
+| Kristen   | Development |
++-----------+-------------+
+4 rows in set (0.00 sec)
+
+
+
